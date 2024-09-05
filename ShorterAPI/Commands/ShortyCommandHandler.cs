@@ -35,6 +35,17 @@ public class ShortyCommandHandler : IRequestHandler<ShortyCommand, ApiResponse>
             return response;
         }
 
+        bool isExists = await _unitOfWork.ShortyRepository.isExists(request.Shorty.ShortUrl);
+
+        if (isExists)
+        {
+            response.Response = false;
+            response.ResponseMessage = "ShortUrl already taken, try another.";
+            response.StatusCode = StatusCodes.Status400BadRequest;
+
+            return response;
+        }
+
         Shorty shorty = new Shorty(
             request.Shorty.Title,
             request.Shorty.FullUrl,

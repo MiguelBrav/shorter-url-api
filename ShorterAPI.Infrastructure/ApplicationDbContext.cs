@@ -14,13 +14,6 @@ namespace ShorterAPI.Infrastructure
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
-
-            builder.Entity<Shorty>()
-                      .HasKey(x => x.Id);
-
-            builder.Entity<Shorty>()
-                   .HasIndex(u => u.ShortUrl)
-                   .IsUnique();
         }
 
         public DbSet<Shorty> Shorty { get; set; }

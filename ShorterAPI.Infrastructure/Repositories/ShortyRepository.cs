@@ -1,4 +1,5 @@
-﻿using ShorterAPI.Domain.Interfaces;
+﻿using Microsoft.EntityFrameworkCore;
+using ShorterAPI.Domain.Interfaces;
 using ShorterAPI.DTO.Entities;
 
 namespace ShorterAPI.Infrastructure.Repositories;
@@ -17,5 +18,11 @@ public class ShortyRepository : IShortyRepository
         await _context.Shorty.AddAsync(shorty);
 
         return shorty;
+    }
+
+    public async Task<bool> isExists(string shortyUri)
+    {
+       return await _context.Shorty.AnyAsync(s => s.ShortUrl == shortyUri && !s.IsDeleted);
+        
     }
 }

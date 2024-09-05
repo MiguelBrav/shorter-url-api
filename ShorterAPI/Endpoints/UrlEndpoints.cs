@@ -55,7 +55,7 @@ public static class UrlEndpoints
 
             ShortyDTO result = JsonConvert.DeserializeObject<ShortyDTO>(responseCommand.ResponseMessage);
 
-            return TypedResults.Created($"/url/", result);
+            return TypedResults.Created($"url/{result.Id}", result);
 
         } else
         {
