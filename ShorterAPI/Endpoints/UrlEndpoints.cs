@@ -19,7 +19,7 @@ public static class UrlEndpoints
 
         group.MapPost("/", Create).RequireAuthorization();
 
-        group.MapPut("/", () => $"URL updated, your updated url is =>").RequireAuthorization();
+        group.MapPut("/", Update ).RequireAuthorization();
 
         group.MapDelete("/{id}", (int id) => $"URL {id} deleted").RequireAuthorization();
 
@@ -58,6 +58,44 @@ public static class UrlEndpoints
             return TypedResults.Created($"url/{result.Id}", result);
 
         } else
+        {
+            return TypedResults.Unauthorized();
+        }
+    }
+
+    static async Task<Results<Ok<ShortyDTO>, NotFound<string>, UnauthorizedHttpResult, BadRequest<string>>> Update(UpdateShortyDTO shortyDTO, IMediator mediator, HttpContext httpContext)
+    {
+
+        var userClaim = httpContext.User.Identity?.Name ?? string.Empty;
+
+        if (!string.IsNullOrEmpty(userClaim))
+        {
+            string _User = userClaim;
+
+            UpdateShortyCommand shortyCommand = new UpdateShortyCommand
+            {
+                UserId = _User,
+                Shorty = shortyDTO
+            };
+
+            ApiResponse responseCommand = await mediator.Send(shortyCommand);
+
+            if (responseCommand.StatusCode == 404)
+            {
+                return TypedResults.NotFound(responseCommand.ResponseMessage);
+            }
+
+            if (responseCommand.StatusCode == 400)
+            {
+                return TypedResults.BadRequest(responseCommand.ResponseMessage);
+            }
+
+            ShortyDTO result = JsonConvert.DeserializeObject<ShortyDTO>(responseCommand.ResponseMessage);
+
+            return TypedResults.Ok(result);
+
+        }
+        else
         {
             return TypedResults.Unauthorized();
         }

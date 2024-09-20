@@ -22,7 +22,22 @@ public class ShortyRepository : IShortyRepository
 
     public async Task<bool> isExists(string shortyUri)
     {
-       return await _context.Shorty.AnyAsync(s => s.ShortUrl == shortyUri && !s.IsDeleted);
-        
+       return await _context.Shorty.AnyAsync(s => s.ShortUrl == shortyUri && !s.IsDeleted);        
+    }
+    public async Task<Shorty> ById(int Id)
+    {
+        return await _context.Shorty.FirstOrDefaultAsync(s => s.Id == Id && !s.IsDeleted);
+    }
+
+    public async Task<Shorty> isExistsShorty(string shortyUri)
+    {
+        return await _context.Shorty.FirstOrDefaultAsync(s => s.ShortUrl == shortyUri && !s.IsDeleted);
+    }
+
+    public async Task<Shorty> Update(Shorty shorty)
+    {
+       _context.Shorty.Update(shorty);
+
+        return shorty;
     }
 }
