@@ -8,7 +8,7 @@ using ShorterAPI.DTO.Responses;
 
 namespace ShorterAPI.Commands;
 
-public class ShortyCommandHandler : IRequestHandler<ShortyCommand, ApiResponse>
+public class ShortyCommandHandler : IRequestHandler<ShortyCommand, IResult>
 {
     private readonly UserManager<IdentityUser> _userManager;
 
@@ -20,30 +20,20 @@ public class ShortyCommandHandler : IRequestHandler<ShortyCommand, ApiResponse>
         _unitOfWork = unitOfWork;
 
     }
-    public async Task<ApiResponse> Handle(ShortyCommand request, CancellationToken cancellationToken)
+    public async Task<IResult> Handle(ShortyCommand request, CancellationToken cancellationToken)
     {
-        ApiResponse response = new ApiResponse();
-
         IdentityUser userExists = await _userManager.FindByNameAsync(request.UserId);
 
         if (userExists == null)
         {
-            response.Response = false;
-            response.ResponseMessage = "The user does not exists.";
-            response.StatusCode = StatusCodes.Status404NotFound;
-
-            return response;
+            return TypedResults.NotFound("The user does not exists");
         }
 
         bool isExists = await _unitOfWork.ShortyRepository.isExists(request.Shorty.ShortUrl);
 
         if (isExists)
         {
-            response.Response = false;
-            response.ResponseMessage = "ShortUrl already taken, try another.";
-            response.StatusCode = StatusCodes.Status400BadRequest;
-
-            return response;
+            return TypedResults.BadRequest("ShortUrl already taken, try another.");
         }
 
         Shorty shorty = new Shorty(
@@ -63,19 +53,11 @@ public class ShortyCommandHandler : IRequestHandler<ShortyCommand, ApiResponse>
             result.Id = shorty.Id;
             result.ShortUrl = shorty.ShortUrl;
 
-            response.Response = true;
-            response.ResponseMessage = JsonConvert.SerializeObject(result);
-            response.StatusCode = StatusCodes.Status200OK;
-
-            return response;
+            return TypedResults.Created($"url/{result.Id}", result);
         }
         catch (Exception)
         {
-            response.Response = false;
-            response.ResponseMessage = "Url not saved";
-            response.StatusCode = StatusCodes.Status400BadRequest;
-
-            return response;
+            return TypedResults.BadRequest("Url not saved");
         }
 
     }

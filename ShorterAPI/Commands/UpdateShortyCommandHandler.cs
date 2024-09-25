@@ -9,7 +9,7 @@ using ShorterAPI.DTO.Responses;
 
 namespace ShorterAPI.Commands;
 
-public class UpdateShortyCommandHandler : IRequestHandler<UpdateShortyCommand, ApiResponse>
+public class UpdateShortyCommandHandler : IRequestHandler<UpdateShortyCommand, IResult>
 {
     private readonly UserManager<IdentityUser> _userManager;
 
@@ -21,7 +21,7 @@ public class UpdateShortyCommandHandler : IRequestHandler<UpdateShortyCommand, A
         _unitOfWork = unitOfWork;
 
     }
-    public async Task<ApiResponse> Handle(UpdateShortyCommand request, CancellationToken cancellationToken)
+    public async Task<IResult> Handle(UpdateShortyCommand request, CancellationToken cancellationToken)
     {
         ApiResponse response = new ApiResponse();
 
@@ -29,22 +29,14 @@ public class UpdateShortyCommandHandler : IRequestHandler<UpdateShortyCommand, A
 
         if (userExists == null)
         {
-            response.Response = false;
-            response.ResponseMessage = "The user does not exists.";
-            response.StatusCode = StatusCodes.Status404NotFound;
-
-            return response;
+            return TypedResults.NotFound("The user does not exists");
         }
 
         Shorty shortyToUpdate = await _unitOfWork.ShortyRepository.ById(request.Shorty.Id);
 
         if (shortyToUpdate is null || shortyToUpdate?.CreatedUser != userExists.Id)
         {
-            response.Response = false;
-            response.ResponseMessage = "ShortUrl does not exists";
-            response.StatusCode = StatusCodes.Status400BadRequest;
-
-            return response;
+            return TypedResults.BadRequest("ShortUrl does not exists");
         }
 
         try
@@ -53,11 +45,7 @@ public class UpdateShortyCommandHandler : IRequestHandler<UpdateShortyCommand, A
 
             if(sameNameShorty is not null && sameNameShorty.Id != shortyToUpdate.Id)
             {
-                response.Response = false;
-                response.ResponseMessage = "ShortUrl already taken, try another.";
-                response.StatusCode = StatusCodes.Status400BadRequest;
-
-                return response;
+                return TypedResults.BadRequest("ShortUrl already taken, try another.");
             }
 
             shortyToUpdate.FullUrl = request.Shorty.FullUrl ?? shortyToUpdate.FullUrl;
@@ -73,19 +61,11 @@ public class UpdateShortyCommandHandler : IRequestHandler<UpdateShortyCommand, A
             result.Id = shortyToUpdate.Id;
             result.ShortUrl = shortyToUpdate.ShortUrl;
 
-            response.Response = true;
-            response.ResponseMessage = JsonConvert.SerializeObject(result);
-            response.StatusCode = StatusCodes.Status200OK;
-
-            return response;
+            return TypedResults.Ok(result);
         }
         catch (Exception)
         {
-            response.Response = false;
-            response.ResponseMessage = "Shorty not updated";
-            response.StatusCode = StatusCodes.Status400BadRequest;
-
-            return response;
+            return TypedResults.BadRequest("Shorty not updated");
         }
 
     }

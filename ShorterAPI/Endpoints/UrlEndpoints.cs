@@ -26,7 +26,7 @@ public static class UrlEndpoints
         return group;
     }
 
-    static async Task<Results<Created<ShortyDTO>, NotFound<string>, UnauthorizedHttpResult, BadRequest<string>>>Create(CreateShortyDTO shortyDTO, IMediator mediator, HttpContext httpContext)
+    static async Task<IResult> Create(CreateShortyDTO shortyDTO, IMediator mediator, HttpContext httpContext)
     {
 
         var userClaim = httpContext.User.Identity?.Name ?? string.Empty;
@@ -41,29 +41,15 @@ public static class UrlEndpoints
                 Shorty = shortyDTO
             };
 
-            ApiResponse responseCommand = await mediator.Send(shortyCommand);
-
-            if (responseCommand.StatusCode == 404)
-            {
-                return TypedResults.NotFound(responseCommand.ResponseMessage);
-            }
-
-            if (responseCommand.StatusCode == 400)
-            {
-                return TypedResults.BadRequest(responseCommand.ResponseMessage);
-            }
-
-            ShortyDTO result = JsonConvert.DeserializeObject<ShortyDTO>(responseCommand.ResponseMessage);
-
-            return TypedResults.Created($"url/{result.Id}", result);
-
-        } else
+            return await mediator.Send(shortyCommand);
+        } 
+        else
         {
             return TypedResults.Unauthorized();
         }
     }
 
-    static async Task<Results<Ok<ShortyDTO>, NotFound<string>, UnauthorizedHttpResult, BadRequest<string>>> Update(UpdateShortyDTO shortyDTO, IMediator mediator, HttpContext httpContext)
+    static async Task<IResult> Update(UpdateShortyDTO shortyDTO, IMediator mediator, HttpContext httpContext)
     {
 
         var userClaim = httpContext.User.Identity?.Name ?? string.Empty;
@@ -78,22 +64,7 @@ public static class UrlEndpoints
                 Shorty = shortyDTO
             };
 
-            ApiResponse responseCommand = await mediator.Send(shortyCommand);
-
-            if (responseCommand.StatusCode == 404)
-            {
-                return TypedResults.NotFound(responseCommand.ResponseMessage);
-            }
-
-            if (responseCommand.StatusCode == 400)
-            {
-                return TypedResults.BadRequest(responseCommand.ResponseMessage);
-            }
-
-            ShortyDTO result = JsonConvert.DeserializeObject<ShortyDTO>(responseCommand.ResponseMessage);
-
-            return TypedResults.Ok(result);
-
+            return await mediator.Send(shortyCommand);
         }
         else
         {
