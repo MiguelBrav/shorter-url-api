@@ -19,9 +19,9 @@ public static class UrlEndpoints
 
         group.MapPost("/", Create).RequireAuthorization();
 
-        group.MapPut("/", Update ).RequireAuthorization();
+        group.MapPut("/", Update).RequireAuthorization();
 
-        group.MapDelete("/{id}", (int id) => $"URL {id} deleted").RequireAuthorization();
+        group.MapDelete("/{id}", Delete).RequireAuthorization();
 
         return group;
     }
@@ -62,6 +62,29 @@ public static class UrlEndpoints
             {
                 UserId = _User,
                 Shorty = shortyDTO
+            };
+
+            return await mediator.Send(shortyCommand);
+        }
+        else
+        {
+            return TypedResults.Unauthorized();
+        }
+    }
+
+    static async Task<IResult> Delete(int id, IMediator mediator, HttpContext httpContext)
+    {
+
+        var userClaim = httpContext.User.Identity?.Name ?? string.Empty;
+
+        if (!string.IsNullOrEmpty(userClaim))
+        {
+            string _User = userClaim;
+
+            DeleteShortyCommand shortyCommand = new DeleteShortyCommand
+            {
+                UserId = _User,
+                Shorty = new ShortyIdDTO { Id = id }
             };
 
             return await mediator.Send(shortyCommand);

@@ -3,8 +3,8 @@ using ShorterAPI.DTO.DTOs;
 
 namespace ShorterAPI.Commands;
 
-public class ShortyCommand : IRequest<IResult>
+public class DeleteShortyCommand : IRequest<IResult>
 {
     public string UserId {  get; set; } = string.Empty;
-    public CreateShortyDTO Shorty { get; set; } = new CreateShortyDTO();
+    public ShortyIdDTO Shorty { get; set; } = new ShortyIdDTO();
 }

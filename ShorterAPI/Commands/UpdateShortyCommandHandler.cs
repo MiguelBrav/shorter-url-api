@@ -23,8 +23,6 @@ public class UpdateShortyCommandHandler : IRequestHandler<UpdateShortyCommand, I
     }
     public async Task<IResult> Handle(UpdateShortyCommand request, CancellationToken cancellationToken)
     {
-        ApiResponse response = new ApiResponse();
-
         IdentityUser userExists = await _userManager.FindByNameAsync(request.UserId);
 
         if (userExists == null)
@@ -36,7 +34,7 @@ public class UpdateShortyCommandHandler : IRequestHandler<UpdateShortyCommand, I
 
         if (shortyToUpdate is null || shortyToUpdate?.CreatedUser != userExists.Id)
         {
-            return TypedResults.BadRequest("ShortUrl does not exists");
+            return TypedResults.BadRequest("Shorty does not exists");
         }
 
         try
