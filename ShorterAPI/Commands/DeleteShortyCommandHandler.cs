@@ -23,7 +23,7 @@ public class DeleteShortyCommandHandler : IRequestHandler<DeleteShortyCommand, I
     }
     public async Task<IResult> Handle(DeleteShortyCommand request, CancellationToken cancellationToken)
     {
-        IdentityUser userExists = await _userManager.FindByNameAsync(request.UserId);
+        IdentityUser userExists = await _userManager.FindByNameAsync(request.UserName);
 
         if (userExists == null)
         {

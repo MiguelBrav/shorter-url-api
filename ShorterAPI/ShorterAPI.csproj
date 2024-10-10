@@ -21,10 +21,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Queries\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\ShorterAPI.Domain\ShorterAPI.Domain.csproj" />
     <ProjectReference Include="..\ShorterAPI.Infrastructure\ShorterAPI.Infrastructure.csproj" />
   </ItemGroup>

@@ -5,6 +5,6 @@ namespace ShorterAPI.Commands;
 
 public class DeleteShortyCommand : IRequest<IResult>
 {
-    public string UserId {  get; set; } = string.Empty;
+    public string UserName {  get; set; } = string.Empty;
     public ShortyIdDTO Shorty { get; set; } = new ShortyIdDTO();
 }

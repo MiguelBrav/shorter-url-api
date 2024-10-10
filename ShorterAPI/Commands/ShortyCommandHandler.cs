@@ -22,7 +22,7 @@ public class ShortyCommandHandler : IRequestHandler<ShortyCommand, IResult>
     }
     public async Task<IResult> Handle(ShortyCommand request, CancellationToken cancellationToken)
     {
-        IdentityUser userExists = await _userManager.FindByNameAsync(request.UserId);
+        IdentityUser userExists = await _userManager.FindByNameAsync(request.UserName);
 
         if (userExists == null)
         {

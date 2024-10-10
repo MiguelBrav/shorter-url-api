@@ -40,4 +40,9 @@ public class ShortyRepository : IShortyRepository
 
         return shorty;
     }
+
+    public async Task<IEnumerable<Shorty>> GetAllByUser(string userId, int pageNumber, int pageSize)
+    {
+        return await _context.Shorty.Where(s => s.CreatedUser == userId && !s.IsDeleted).AsNoTracking().Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync();
+    }
 }

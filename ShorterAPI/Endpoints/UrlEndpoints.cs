@@ -4,6 +4,7 @@ using Newtonsoft.Json;
 using ShorterAPI.Commands;
 using ShorterAPI.DTO.DTOs;
 using ShorterAPI.DTO.Responses;
+using ShorterAPI.Queries;
 
 namespace ShorterAPI.Endpoints;
 
@@ -12,8 +13,7 @@ public static class UrlEndpoints
     public static RouteGroupBuilder MapUrl(this RouteGroupBuilder group)
     {
         // TODO 
-        group.MapGet("/", () => "All URLs from User")
-              .RequireAuthorization(); 
+        group.MapGet("/page/{pageId}/size/{pageSize}", AllShortys).RequireAuthorization(); 
 
         group.MapGet("/{route}", (string route) => $"URL with shorty: {route} going redirect To =>");
 
@@ -37,7 +37,7 @@ public static class UrlEndpoints
 
             ShortyCommand shortyCommand = new ShortyCommand
             {
-                UserId = _User,
+                UserName = _User,
                 Shorty = shortyDTO
             };
 
@@ -60,7 +60,7 @@ public static class UrlEndpoints
 
             UpdateShortyCommand shortyCommand = new UpdateShortyCommand
             {
-                UserId = _User,
+                UserName = _User,
                 Shorty = shortyDTO
             };
 
@@ -83,8 +83,32 @@ public static class UrlEndpoints
 
             DeleteShortyCommand shortyCommand = new DeleteShortyCommand
             {
-                UserId = _User,
+                UserName = _User,
                 Shorty = new ShortyIdDTO { Id = id }
+            };
+
+            return await mediator.Send(shortyCommand);
+        }
+        else
+        {
+            return TypedResults.Unauthorized();
+        }
+    }
+
+    static async Task<IResult> AllShortys(int pageId,int pageSize, IMediator mediator, HttpContext httpContext)
+    {
+
+        var userClaim = httpContext.User.Identity?.Name ?? string.Empty;
+
+        if (!string.IsNullOrEmpty(userClaim))
+        {
+            string _User = userClaim;
+
+            AllShortyQuery shortyCommand = new AllShortyQuery
+            {
+                UserName = _User,
+                PageNumber = pageId,
+                PageSize = pageSize,
             };
 
             return await mediator.Send(shortyCommand);

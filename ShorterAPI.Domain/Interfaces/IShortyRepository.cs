@@ -13,4 +13,6 @@ public interface IShortyRepository
     Task<Shorty> isExistsShorty(string shortyUri);
 
     Task<bool> isExists(string shortyUri);
+
+    Task<IEnumerable<Shorty>> GetAllByUser(string userId, int pageNumber, int pageSize);
 }

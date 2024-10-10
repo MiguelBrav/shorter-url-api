@@ -5,6 +5,6 @@ namespace ShorterAPI.Commands;
 
 public class ShortyCommand : IRequest<IResult>
 {
-    public string UserId {  get; set; } = string.Empty;
+    public string UserName {  get; set; } = string.Empty;
     public CreateShortyDTO Shorty { get; set; } = new CreateShortyDTO();
 }
