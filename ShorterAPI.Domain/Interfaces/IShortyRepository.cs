@@ -10,6 +10,8 @@ public interface IShortyRepository
 
     Task<Shorty> ById(int Id);
 
+    Task<Shorty> ByIdByUser(string userId, int id);
+
     Task<Shorty> isExistsShorty(string shortyUri);
 
     Task<bool> isExists(string shortyUri);
