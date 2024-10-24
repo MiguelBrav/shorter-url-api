@@ -15,7 +15,7 @@ public static class UrlEndpoints
         // TODO 
         group.MapGet("/page/{pageId}/size/{pageSize}", AllShortys).RequireAuthorization(); 
 
-        group.MapGet("/{route}", (string route) => $"URL with shorty: {route} going redirect To =>");
+        group.MapGet("/{route}", Redirect);
 
         group.MapGet("/id/{id}", ById).RequireAuthorization();
 
@@ -142,6 +142,16 @@ public static class UrlEndpoints
         {
             return TypedResults.Unauthorized();
         }
+    }
+
+    static async Task<IResult> Redirect(string route, IMediator mediator, HttpContext httpContext)
+    {
+        RedirectQuery shortyCommand = new RedirectQuery
+        {
+            ShortyUrl = route
+        };
+        
+        return await mediator.Send(shortyCommand);  
     }
 
 }
