@@ -65,6 +65,7 @@ builder.Services.AddMediatR(a => a.RegisterServicesFromAssembly(typeof(Program).
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IShortyRepository,ShortyRepository>();
+builder.Services.AddScoped<ILogRedirectRepository, LogRedirectRepository>();
 
 builder.Services.AddAuthorization(options =>
 {

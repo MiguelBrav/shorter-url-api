@@ -1,0 +1,9 @@
+﻿using ShorterAPI.DTO.Entities;
+
+namespace ShorterAPI.Domain.Interfaces;
+
+public interface ILogRedirectRepository
+{
+    Task<LogRedirect> Create(LogRedirect logRedirect);
+
+ }

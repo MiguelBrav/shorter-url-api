@@ -14,6 +14,12 @@ public class LogRedirect
     public int ShortyId { get; set; } 
 
     [ForeignKey(nameof(ShortyId))]
-    public Shorty Shorty { get; set; } 
+    public Shorty Shorty { get; set; }
+
+    public LogRedirect(int shortyId)
+    {
+        ShortyId = shortyId;
+        RedirectDate = DateTime.UtcNow; 
+    }
 
 }
