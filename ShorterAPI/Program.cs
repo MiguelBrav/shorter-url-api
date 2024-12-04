@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.OpenApi.Models;
+using ShorterAPI.Configurations;
 using ShorterAPI.Domain.Interfaces;
 using ShorterAPI.Domain.UOW;
 using ShorterAPI.Endpoints;
@@ -93,6 +93,9 @@ builder.Services.AddIdentityCore<IdentityUser>(options =>
 .AddEntityFrameworkStores<ApplicationDbContext>()
 .AddDefaultTokenProviders();
 
+builder.Services.AddHealthChecks()
+    .AddCheck<DbContextHealthCheck>("ApplicationDbContext", tags: new[] { "database" });
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -101,6 +104,12 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.MapHealthChecks("/healthz", new Microsoft.AspNetCore.Diagnostics.HealthChecks.HealthCheckOptions
+{
+    ResponseWriter = HealthCheckResponse.WriteResponse
+});
+
 
 app.UseCors("AllowAll");
 
