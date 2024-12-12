@@ -5,5 +5,6 @@ namespace ShorterAPI.Domain.Interfaces;
 public interface ILogRedirectRepository
 {
     Task<LogRedirect> Create(LogRedirect logRedirect);
+    Task<IEnumerable<LogRedirect>> ByShorty(int shortyId);
 
- }
+}

@@ -1,4 +1,5 @@
-﻿using ShorterAPI.Domain.Interfaces;
+﻿using Microsoft.EntityFrameworkCore;
+using ShorterAPI.Domain.Interfaces;
 using ShorterAPI.DTO.Entities;
 
 namespace ShorterAPI.Infrastructure.Repositories;
@@ -18,5 +19,9 @@ public class LogRedirectRepository : ILogRedirectRepository
 
         return logRedirect;
     }
-   
+    public async Task<IEnumerable<LogRedirect>> ByShorty(int shortyId)
+    {
+        return await _context.LogRedirect.Where(s => s.ShortyId == shortyId).AsNoTracking().ToListAsync();
+    }
+
 }
