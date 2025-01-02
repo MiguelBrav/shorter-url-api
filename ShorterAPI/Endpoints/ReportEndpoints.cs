@@ -12,6 +12,8 @@ public static class ReportEndpoints
 
         group.MapGet("/redirect/{id}", ByShortyId).RequireAuthorization();
 
+        group.MapGet("/redirect/page/{pageId}/size/{pageSize}", AllRedirects).RequireAuthorization();
+
         return group;
     }
 
@@ -38,5 +40,29 @@ public static class ReportEndpoints
         }
     }
 
- 
+    static async Task<IResult> AllRedirects(int pageId, int pageSize, IMediator mediator, HttpContext httpContext)
+    {
+
+        var userClaim = httpContext.User.Identity?.Name ?? string.Empty;
+
+        if (!string.IsNullOrEmpty(userClaim))
+        {
+            string _User = userClaim;
+
+            AllShortyReportQuery shortyCommand = new AllShortyReportQuery
+            {
+                UserName = _User,
+                PageNumber = pageId,
+                PageSize = pageSize,
+            };
+
+            return await mediator.Send(shortyCommand);
+        }
+        else
+        {
+            return TypedResults.Unauthorized();
+        }
+    }
+
+
 }

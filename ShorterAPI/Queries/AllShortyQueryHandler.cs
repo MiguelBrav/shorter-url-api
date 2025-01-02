@@ -29,7 +29,7 @@ public class AllShortyQueryHandler : IRequestHandler<AllShortyQuery, IResult>
 
         IEnumerable<Shorty> shortys = await _unitOfWork.ShortyRepository.GetAllByUser(userExists.Id, request.PageNumber, request.PageSize);
 
-        if (shortys is null || shortys?.Count() == 0)
+        if (!shortys.Any())
         {
             return TypedResults.NoContent();
         }

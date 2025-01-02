@@ -4,6 +4,8 @@ namespace ShorterAPI.DTO.Responses;
 
 public class RedirectReportResponse
 {
+    public int ShortyId { get; set; }
+
     public int Total {  get; set; }
 
     public List<RedirectShorty> Redirects { get; set; } = new List<RedirectShorty>();
@@ -15,6 +17,7 @@ public class RedirectReportResponse
             throw new ArgumentNullException(nameof(logRedirects));
 
         Total = logRedirects.Count;
+        ShortyId = logRedirects.Select(x => x.ShortyId).FirstOrDefault();
         Redirects = logRedirects.Select(log => new RedirectShorty
         {
             Id = log.Id,
