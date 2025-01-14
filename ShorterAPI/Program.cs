@@ -119,7 +119,7 @@ app.MapGroup("/identity").WithTags("Identity").MapIdentityApi<IdentityUser>();
 
 app.MapGroup("/url").WithTags("Url").MapUrl();
 
-app.MapGroup("/report").WithTags("Report").MapReport();
+app.MapGroup("/logredirect").WithTags("LogRedirect").MapReport();
 
 app.Run();
 

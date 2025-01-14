@@ -5,14 +5,14 @@ using ShorterAPI.Queries;
 
 namespace ShorterAPI.Endpoints;
 
-public static class ReportEndpoints
+public static class LogRedirectEndpoints
 {
     public static RouteGroupBuilder MapReport(this RouteGroupBuilder group)
     {
 
-        group.MapGet("/redirect/{id}", ByShortyId).RequireAuthorization();
+        group.MapGet("/{id}", ByShortyId).RequireAuthorization();
 
-        group.MapGet("/redirect/page/{pageId}/size/{pageSize}", AllRedirects).RequireAuthorization();
+        group.MapGet("/page/{pageId}/size/{pageSize}", AllRedirects).RequireAuthorization();
 
         return group;
     }

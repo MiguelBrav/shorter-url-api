@@ -3,23 +3,22 @@ using Microsoft.AspNetCore.Identity;
 using ShorterAPI.Domain.UOW;
 using ShorterAPI.DTO.Entities;
 using ShorterAPI.DTO.Responses;
-using System.Linq;
 
 namespace ShorterAPI.Queries;
 
-public class ShortyReportQueryHandler : IRequestHandler<ShortyReportQuery, IResult>
+public class ShortyStatsByIdQueryHandler : IRequestHandler<ShortyStatsByIdQuery, IResult>
 {
     private readonly UserManager<IdentityUser> _userManager;
 
     private readonly IUnitOfWork _unitOfWork;
 
-    public ShortyReportQueryHandler(UserManager<IdentityUser> userManager, IUnitOfWork unitOfWork)
+    public ShortyStatsByIdQueryHandler(UserManager<IdentityUser> userManager, IUnitOfWork unitOfWork)
     {
         _userManager = userManager;
         _unitOfWork = unitOfWork;
 
     }
-    public async Task<IResult> Handle(ShortyReportQuery request, CancellationToken cancellationToken)
+    public async Task<IResult> Handle(ShortyStatsByIdQuery request, CancellationToken cancellationToken)
     {
         IdentityUser userExists = await _userManager.FindByNameAsync(request.UserName);
 
@@ -30,20 +29,15 @@ public class ShortyReportQueryHandler : IRequestHandler<ShortyReportQuery, IResu
 
         Shorty shorty = await _unitOfWork.ShortyRepository.ByIdByUser(userExists.Id, request.ShortyId);
 
-        if (shorty?.CreatedUser != userExists.Id)
-        {
-            return TypedResults.Unauthorized();
-        }
-
-        IEnumerable<LogRedirect> logRedirects = await _unitOfWork.LogRepository.ByShorty(shorty.Id);
-
-        if (!logRedirects.Any())
+        if (shorty is null)
         {
             return TypedResults.NoContent();
         }
 
-        RedirectReportResponse redirectReport = new RedirectReportResponse(logRedirects.ToList(), shorty);
+        int _accessCount = await _unitOfWork.LogRepository.CountByShorty(request.ShortyId);
 
-        return TypedResults.Ok(redirectReport);
+        ShortyStatsResponse response = new ShortyStatsResponse(shorty, _accessCount);
+
+        return TypedResults.Ok(response);
     }
 }

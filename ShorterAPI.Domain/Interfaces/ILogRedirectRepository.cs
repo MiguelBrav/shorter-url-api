@@ -8,4 +8,6 @@ public interface ILogRedirectRepository
     Task<IEnumerable<LogRedirect>> ByShorty(int shortyId);
 
     Task<IEnumerable<LogRedirect>> ByShortyIds(IEnumerable<int> shortyIds);
+
+    Task<int> CountByShorty(int shortyId);
 }

@@ -19,6 +19,8 @@ public static class UrlEndpoints
 
         group.MapGet("/id/{id}", ById).RequireAuthorization();
 
+        group.MapGet("/id/{id}/stats", StatsById).RequireAuthorization();
+
         group.MapPost("/", Create).RequireAuthorization();
 
         group.MapPut("/", Update).RequireAuthorization();
@@ -131,6 +133,29 @@ public static class UrlEndpoints
             string _User = userClaim;
 
             ShortyQuery shortyCommand = new ShortyQuery
+            {
+                UserName = _User,
+                ShortyId = id
+            };
+
+            return await mediator.Send(shortyCommand);
+        }
+        else
+        {
+            return TypedResults.Unauthorized();
+        }
+    }
+
+    static async Task<IResult> StatsById(int id, IMediator mediator, HttpContext httpContext)
+    {
+
+        var userClaim = httpContext.User.Identity?.Name ?? string.Empty;
+
+        if (!string.IsNullOrEmpty(userClaim))
+        {
+            string _User = userClaim;
+
+            ShortyStatsByIdQuery shortyCommand = new ShortyStatsByIdQuery
             {
                 UserName = _User,
                 ShortyId = id

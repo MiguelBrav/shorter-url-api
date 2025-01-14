@@ -52,7 +52,7 @@ public class AllShortyReportQueryHandler : IRequestHandler<AllShortyReportQuery,
 
             if (logRedirects != null && logRedirects.Any())
             {
-                RedirectReportResponse redirectReport = new RedirectReportResponse(logRedirects.ToList());
+                RedirectReportResponse redirectReport = new RedirectReportResponse(logRedirects.ToList(), shorty);
                 response.Add(redirectReport);
             }
             else
@@ -60,6 +60,7 @@ public class AllShortyReportQueryHandler : IRequestHandler<AllShortyReportQuery,
                 RedirectReportResponse redirectReport = new RedirectReportResponse();
                 redirectReport.Total = 0;
                 redirectReport.ShortyId = shorty.Id;
+                redirectReport.ShortyTiltle = shorty.Title;
                 response.Add(redirectReport);
             }
         }

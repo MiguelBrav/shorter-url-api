@@ -29,4 +29,9 @@ public class LogRedirectRepository : ILogRedirectRepository
         return await _context.LogRedirect.Where(s => shortyIds.Contains(s.ShortyId)).AsNoTracking().ToListAsync();
     }
 
+    public async Task<int> CountByShorty(int shortyId)
+    {
+        return await _context.LogRedirect.Where(s => s.ShortyId == shortyId).CountAsync();
+    }
+
 }

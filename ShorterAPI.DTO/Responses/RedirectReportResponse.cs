@@ -6,12 +6,14 @@ public class RedirectReportResponse
 {
     public int ShortyId { get; set; }
 
+    public string ShortyTiltle { get; set; } = string.Empty;
+
     public int Total {  get; set; }
 
     public List<RedirectShorty> Redirects { get; set; } = new List<RedirectShorty>();
 
     public RedirectReportResponse() { }
-    public RedirectReportResponse(List<LogRedirect> logRedirects)
+    public RedirectReportResponse(List<LogRedirect> logRedirects, Shorty shorty)
     {
         if (logRedirects == null)
             throw new ArgumentNullException(nameof(logRedirects));
@@ -23,6 +25,8 @@ public class RedirectReportResponse
             Id = log.Id,
             dateTime = log.RedirectDate
         }).ToList();
+        ShortyTiltle = shorty.Title;
+    
     }
 }
 
