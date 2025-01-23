@@ -2,8 +2,8 @@
 
 namespace ShorterAPI.DTO.DTOs;
 
-public class ShortyIdDTO
+public class ShortyUrlDTO
 {
     [Required]
-    public int Id { get; set; }
+    public string ShortyName { get; set; }
 }

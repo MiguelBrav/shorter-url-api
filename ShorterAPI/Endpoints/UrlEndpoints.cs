@@ -12,14 +12,15 @@ public static class UrlEndpoints
 {
     public static RouteGroupBuilder MapUrl(this RouteGroupBuilder group)
     {
-        // TODO 
-        group.MapGet("/page/{pageId}/size/{pageSize}", AllShortys).RequireAuthorization(); 
+        group.MapGet("/page/{pageId}/size/{pageSize}", AllShortys).RequireAuthorization();
 
         group.MapGet("/{route}", Redirect);
 
         group.MapGet("/id/{id}", ById).RequireAuthorization();
 
         group.MapGet("/id/{id}/stats", StatsById).RequireAuthorization();
+
+        group.MapGet("/check/{shorturl}", CheckName);
 
         group.MapPost("/", Create).RequireAuthorization();
 
@@ -46,7 +47,7 @@ public static class UrlEndpoints
             };
 
             return await mediator.Send(shortyCommand);
-        } 
+        }
         else
         {
             return TypedResults.Unauthorized();
@@ -99,7 +100,7 @@ public static class UrlEndpoints
         }
     }
 
-    static async Task<IResult> AllShortys(int pageId,int pageSize, IMediator mediator, HttpContext httpContext)
+    static async Task<IResult> AllShortys(int pageId, int pageSize, IMediator mediator, HttpContext httpContext)
     {
 
         var userClaim = httpContext.User.Identity?.Name ?? string.Empty;
@@ -169,14 +170,26 @@ public static class UrlEndpoints
         }
     }
 
+    static async Task<IResult> CheckName(string shorturl, IMediator mediator, HttpContext httpContext)
+    {
+
+        CheckShortyNameQuery checkShortyNameQuery = new CheckShortyNameQuery
+        {
+            ShortyUrl = new ShortyUrlDTO { ShortyName = shorturl }
+        };
+
+        return await mediator.Send(checkShortyNameQuery);
+
+    }
+
     static async Task<IResult> Redirect(string route, IMediator mediator, HttpContext httpContext)
     {
         RedirectQuery shortyCommand = new RedirectQuery
         {
             ShortyUrl = route
         };
-        
-        return await mediator.Send(shortyCommand);  
+
+        return await mediator.Send(shortyCommand);
     }
 
 }
