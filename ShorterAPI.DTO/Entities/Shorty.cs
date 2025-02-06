@@ -36,4 +36,14 @@ public class Shorty
         ShortUrl = shortUrl ?? string.Empty;
         CreatedDate = DateTime.UtcNow;
     }
+
+    // Constructor for generate and bulk
+    public Shorty(string fullUrl, string createdUser, string? shortUrl = null)
+    {
+        Title = shortUrl ?? string.Empty;
+        FullUrl = fullUrl;
+        CreatedUser = createdUser;
+        ShortUrl = shortUrl ?? string.Empty;
+        CreatedDate = DateTime.UtcNow;
+    }
 }

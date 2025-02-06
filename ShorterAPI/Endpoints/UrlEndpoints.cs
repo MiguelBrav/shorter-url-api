@@ -28,6 +28,8 @@ public static class UrlEndpoints
 
         group.MapDelete("/{id}", Delete).RequireAuthorization();
 
+        group.MapPost("/generate", Generate).RequireAuthorization();
+
         return group;
     }
 
@@ -190,6 +192,29 @@ public static class UrlEndpoints
         };
 
         return await mediator.Send(shortyCommand);
+    }
+
+    static async Task<IResult> Generate(GenerateShortyDTO shortyDTO, IMediator mediator, HttpContext httpContext)
+    {
+
+        var userClaim = httpContext.User.Identity?.Name ?? string.Empty;
+
+        if (!string.IsNullOrEmpty(userClaim))
+        {
+            string _User = userClaim;
+
+            GenerateShortyCommand shortyCommand = new GenerateShortyCommand
+            {
+                UserName = _User,
+                Shorty = shortyDTO
+            };
+
+            return await mediator.Send(shortyCommand);
+        }
+        else
+        {
+            return TypedResults.Unauthorized();
+        }
     }
 
 }

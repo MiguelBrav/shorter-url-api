@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using ShorterAPI.Configurations;
 using ShorterAPI.Domain.Interfaces;
+using ShorterAPI.Domain.Services;
 using ShorterAPI.Domain.UOW;
 using ShorterAPI.Endpoints;
 using ShorterAPI.Infrastructure;
@@ -66,6 +67,7 @@ builder.Services.AddMediatR(a => a.RegisterServicesFromAssembly(typeof(Program).
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IShortyRepository,ShortyRepository>();
 builder.Services.AddScoped<ILogRedirectRepository, LogRedirectRepository>();
+builder.Services.AddScoped<IShortyService, ShortyService>();
 
 builder.Services.AddAuthorization(options =>
 {
