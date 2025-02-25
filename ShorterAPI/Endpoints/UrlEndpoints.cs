@@ -30,6 +30,8 @@ public static class UrlEndpoints
 
         group.MapPost("/generate", Generate).RequireAuthorization();
 
+        group.MapPost("/generate/bulk", GenerateBulk).RequireAuthorization();
+
         return group;
     }
 
@@ -210,6 +212,29 @@ public static class UrlEndpoints
             };
 
             return await mediator.Send(shortyCommand);
+        }
+        else
+        {
+            return TypedResults.Unauthorized();
+        }
+    }
+
+    static async Task<IResult> GenerateBulk(List<GenerateShortyDTO> shortysDTO, IMediator mediator, HttpContext httpContext)
+    {
+
+        var userClaim = httpContext.User.Identity?.Name ?? string.Empty;
+
+        if (!string.IsNullOrEmpty(userClaim))
+        {
+            string _User = userClaim;
+
+            GenerateBulkShortyCommand shortyBulkCommand = new GenerateBulkShortyCommand
+            {
+                UserName = _User,
+                Shortys = shortysDTO
+            };
+
+            return await mediator.Send(shortyBulkCommand);
         }
         else
         {

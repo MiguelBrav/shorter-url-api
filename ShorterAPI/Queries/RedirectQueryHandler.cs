@@ -26,13 +26,12 @@ public class RedirectQueryHandler : IRequestHandler<RedirectQuery, IResult>
         }
 
         try 
-        { 
-        
+        {         
             await _mediator.Publish(new RedirectEvent(shorty));
         }
         catch (Exception)
         {
-            // TODO - add logger serilog or other
+            // TODO: - add logger serilog or other
             throw;
         }
 

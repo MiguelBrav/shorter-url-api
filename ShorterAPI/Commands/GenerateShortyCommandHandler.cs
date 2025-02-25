@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using ShorterAPI.Domain.Interfaces;
 using ShorterAPI.Domain.UOW;
-using ShorterAPI.DTO.DTOs;
+using ShorterAPI.DTO.Responses;
 using ShorterAPI.DTO.Entities;
 
 namespace ShorterAPI.Commands;
