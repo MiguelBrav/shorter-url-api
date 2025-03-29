@@ -123,5 +123,7 @@ app.MapGroup("/url").WithTags("Url").MapUrl();
 
 app.MapGroup("/logredirect").WithTags("LogRedirect").MapReport();
 
+app.MapGroup("/reports").WithTags("Reports").MapReportGlobal();
+
 app.Run();
 
