@@ -1,4 +1,5 @@
 ﻿using ShorterAPI.DTO.Entities;
+using ShorterAPI.DTO.Responses;
 
 namespace ShorterAPI.Domain.Interfaces;
 
@@ -17,4 +18,6 @@ public interface IShortyRepository
     Task<bool> isExists(string shortyUri);
 
     Task<IEnumerable<Shorty>> GetAllByUser(string userId, int pageNumber, int pageSize);
+    Task<IEnumerable<ShortyTopResponse>> GetTopShortys(int limit);
+
 }

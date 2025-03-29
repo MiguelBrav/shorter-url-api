@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ShorterAPI.Domain.Interfaces;
 using ShorterAPI.DTO.Entities;
+using ShorterAPI.DTO.Responses;
 
 namespace ShorterAPI.Infrastructure.Repositories;
 
@@ -48,5 +49,20 @@ public class ShortyRepository : IShortyRepository
     public async Task<IEnumerable<Shorty>> GetAllByUser(string userId, int pageNumber, int pageSize)
     {
         return await _context.Shorty.Where(s => s.CreatedUser == userId && !s.IsDeleted).AsNoTracking().Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync();
+    }
+
+    public async Task<IEnumerable<ShortyTopResponse>> GetTopShortys(int limit)
+    {
+        return await _context.Shorty
+            .Select(s => new ShortyTopResponse
+            {
+                Id = s.Id,
+                ShortUrl = s.ShortUrl,
+                CreatedDate = s.CreatedDate,
+                AccessCount = _context.LogRedirect.Count(l => l.ShortyId == s.Id)
+            })
+            .OrderByDescending(s => s.AccessCount)
+            .Take(limit)
+            .ToListAsync();
     }
 }
