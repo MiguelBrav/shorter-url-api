@@ -65,4 +65,18 @@ public class ShortyRepository : IShortyRepository
             .Take(limit)
             .ToListAsync();
     }
+
+    public async Task<IEnumerable<LastShortyResponse>> GetLastShortys(int limit)
+    {
+        return await _context.Shorty
+            .OrderByDescending(s => s.CreatedDate)
+            .Take(limit) 
+            .Select(s => new LastShortyResponse
+            {
+                Id = s.Id,
+                ShortUrl = s.ShortUrl,
+                CreatedDate = s.CreatedDate
+            })
+            .ToListAsync();
+    }
 }

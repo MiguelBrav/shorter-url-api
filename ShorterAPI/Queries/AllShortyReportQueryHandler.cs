@@ -60,7 +60,7 @@ public class AllShortyReportQueryHandler : IRequestHandler<AllShortyReportQuery,
                 RedirectReportResponse redirectReport = new RedirectReportResponse();
                 redirectReport.Total = 0;
                 redirectReport.ShortyId = shorty.Id;
-                redirectReport.ShortyTiltle = shorty.Title;
+                redirectReport.ShortyTitle = shorty.Title;
                 response.Add(redirectReport);
             }
         }

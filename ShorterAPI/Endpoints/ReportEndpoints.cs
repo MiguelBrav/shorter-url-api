@@ -9,6 +9,8 @@ public static class ReportEndpoints
     {
         group.MapGet("/top-urls/limit/{limit}", TopShortys);
 
+        group.MapGet("/last-urls/limit/{limit}", LastShortys);
+
         return group;
     }
 
@@ -20,6 +22,26 @@ public static class ReportEndpoints
         if (!string.IsNullOrEmpty(userClaim))
         {
             TopShortyReportQuery shortyCommand = new TopShortyReportQuery
+            {
+                Limit   = limit,
+            };
+
+            return await mediator.Send(shortyCommand);
+        }
+        else
+        {
+            return TypedResults.Unauthorized();
+        }
+    }
+
+    static async Task<IResult> LastShortys(int limit, IMediator mediator, HttpContext httpContext)
+    {
+
+        var userClaim = httpContext.User.Identity?.Name ?? string.Empty;
+
+        if (!string.IsNullOrEmpty(userClaim))
+        {
+            LastShortyReportQuery shortyCommand = new LastShortyReportQuery
             {
                 Limit   = limit,
             };

@@ -6,7 +6,7 @@ public class RedirectReportResponse
 {
     public int ShortyId { get; set; }
 
-    public string ShortyTiltle { get; set; } = string.Empty;
+    public string ShortyTitle { get; set; } = string.Empty;
 
     public int Total {  get; set; }
 
@@ -25,7 +25,7 @@ public class RedirectReportResponse
             Id = log.Id,
             dateTime = log.RedirectDate
         }).ToList();
-        ShortyTiltle = shorty.Title;
+        ShortyTitle = shorty.Title;
     
     }
 }

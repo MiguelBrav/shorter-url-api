@@ -19,5 +19,6 @@ public interface IShortyRepository
 
     Task<IEnumerable<Shorty>> GetAllByUser(string userId, int pageNumber, int pageSize);
     Task<IEnumerable<ShortyTopResponse>> GetTopShortys(int limit);
+    Task<IEnumerable<LastShortyResponse>> GetLastShortys(int limit);
 
 }
