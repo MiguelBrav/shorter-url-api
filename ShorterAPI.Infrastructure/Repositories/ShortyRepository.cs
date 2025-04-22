@@ -54,13 +54,14 @@ public class ShortyRepository : IShortyRepository
     public async Task<IEnumerable<ShortyTopResponse>> GetTopShortys(int limit)
     {
         return await _context.Shorty
+            .Where(s => !s.IsDeleted)
             .Select(s => new ShortyTopResponse
             {
                 Id = s.Id,
                 ShortUrl = s.ShortUrl,
                 CreatedDate = s.CreatedDate,
                 AccessCount = _context.LogRedirect.Count(l => l.ShortyId == s.Id)
-            })
+            })            
             .OrderByDescending(s => s.AccessCount)
             .Take(limit)
             .ToListAsync();
@@ -69,6 +70,7 @@ public class ShortyRepository : IShortyRepository
     public async Task<IEnumerable<LastShortyResponse>> GetLastShortys(int limit)
     {
         return await _context.Shorty
+            .Where(s => !s.IsDeleted)
             .OrderByDescending(s => s.CreatedDate)
             .Take(limit) 
             .Select(s => new LastShortyResponse
@@ -79,4 +81,38 @@ public class ShortyRepository : IShortyRepository
             })
             .ToListAsync();
     }
+
+    public async Task<IEnumerable<RandomShortyResponse>> GetRandomShortys(int limit)
+    {
+        List<int> validIds = await _context.Shorty
+            .Where(s => !s.IsDeleted)
+            .Select(s => s.Id)
+            .ToListAsync();
+
+        if (!validIds.Any() || limit <= 0)
+            return Enumerable.Empty<RandomShortyResponse>();
+
+        int idsToSelect = Math.Min(limit, validIds.Count);
+
+        Random random = new Random();
+        List<int> selectedIds = validIds
+            .OrderBy(_ => random.Next())
+            .Take(idsToSelect)
+            .ToList();
+
+        List<RandomShortyResponse> result = await _context.Shorty
+            .Where(s => selectedIds.Contains(s.Id))
+            .Select(s => new RandomShortyResponse
+            {
+                Id = s.Id,
+                ShortUrl = s.ShortUrl,
+                CreatedDate = s.CreatedDate
+            })
+            .ToListAsync();
+
+        return result;
+    }
+
+
+
 }

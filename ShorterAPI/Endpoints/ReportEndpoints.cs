@@ -11,6 +11,8 @@ public static class ReportEndpoints
 
         group.MapGet("/last-urls/limit/{limit}", LastShortys);
 
+        group.MapGet("/random-urls/limit/{limit}", RandomShortys);
+
         return group;
     }
 
@@ -21,12 +23,12 @@ public static class ReportEndpoints
 
         if (!string.IsNullOrEmpty(userClaim))
         {
-            TopShortyReportQuery shortyCommand = new TopShortyReportQuery
+            TopShortyReportQuery shortyReport = new TopShortyReportQuery
             {
                 Limit   = limit,
             };
 
-            return await mediator.Send(shortyCommand);
+            return await mediator.Send(shortyReport);
         }
         else
         {
@@ -41,12 +43,32 @@ public static class ReportEndpoints
 
         if (!string.IsNullOrEmpty(userClaim))
         {
-            LastShortyReportQuery shortyCommand = new LastShortyReportQuery
+            LastShortyReportQuery shortyReport = new LastShortyReportQuery
             {
                 Limit   = limit,
             };
 
-            return await mediator.Send(shortyCommand);
+            return await mediator.Send(shortyReport);
+        }
+        else
+        {
+            return TypedResults.Unauthorized();
+        }
+    }
+
+    static async Task<IResult> RandomShortys(int limit, IMediator mediator, HttpContext httpContext)
+    {
+
+        var userClaim = httpContext.User.Identity?.Name ?? string.Empty;
+
+        if (!string.IsNullOrEmpty(userClaim))
+        {
+            RandomShortyReportQuery shortyReport = new RandomShortyReportQuery
+            {
+                Limit   = limit,
+            };
+
+            return await mediator.Send(shortyReport);
         }
         else
         {
