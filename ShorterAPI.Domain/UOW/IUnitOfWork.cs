@@ -7,6 +7,7 @@ namespace ShorterAPI.Domain.UOW
     {
         IShortyRepository ShortyRepository { get; }
         ILogRedirectRepository LogRepository { get; }
+        IFavoriteShortyRepository FavoriteShortyRepository { get; }
 
         Task<int> Save();
     }

@@ -54,6 +54,7 @@ public class ShortyRepository : IShortyRepository
     public async Task<IEnumerable<ShortyTopResponse>> GetTopShortys(int limit)
     {
         return await _context.Shorty
+            .AsNoTracking()
             .Where(s => !s.IsDeleted)
             .Select(s => new ShortyTopResponse
             {
@@ -61,7 +62,7 @@ public class ShortyRepository : IShortyRepository
                 ShortUrl = s.ShortUrl,
                 CreatedDate = s.CreatedDate,
                 AccessCount = _context.LogRedirect.Count(l => l.ShortyId == s.Id)
-            })            
+            })
             .OrderByDescending(s => s.AccessCount)
             .Take(limit)
             .ToListAsync();
@@ -70,9 +71,10 @@ public class ShortyRepository : IShortyRepository
     public async Task<IEnumerable<LastShortyResponse>> GetLastShortys(int limit)
     {
         return await _context.Shorty
+            .AsNoTracking()
             .Where(s => !s.IsDeleted)
             .OrderByDescending(s => s.CreatedDate)
-            .Take(limit) 
+            .Take(limit)
             .Select(s => new LastShortyResponse
             {
                 Id = s.Id,
@@ -85,6 +87,7 @@ public class ShortyRepository : IShortyRepository
     public async Task<IEnumerable<RandomShortyResponse>> GetRandomShortys(int limit)
     {
         List<int> validIds = await _context.Shorty
+            .AsNoTracking()
             .Where(s => !s.IsDeleted)
             .Select(s => s.Id)
             .ToListAsync();
@@ -101,6 +104,7 @@ public class ShortyRepository : IShortyRepository
             .ToList();
 
         List<RandomShortyResponse> result = await _context.Shorty
+            .AsNoTracking()
             .Where(s => selectedIds.Contains(s.Id))
             .Select(s => new RandomShortyResponse
             {
@@ -112,6 +116,7 @@ public class ShortyRepository : IShortyRepository
 
         return result;
     }
+
 
 
 
