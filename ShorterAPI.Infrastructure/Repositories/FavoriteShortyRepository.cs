@@ -26,5 +26,23 @@ public class FavoriteShortyRepository : IFavoriteShortyRepository
         return await _context.FavoriteShorty.AsNoTracking().FirstOrDefaultAsync(s => s.ShortyId == Id && s.UserId == userId);
     }
 
-
+    public async Task<IEnumerable<FavoriteShortyResponse>> ByUser(string userId, int pageNumber, int pageSize)
+    {
+        return await _context.FavoriteShorty
+            .AsNoTracking()
+            .Where(f => f.UserId == userId && f.Shorty != null && !f.Shorty.IsDeleted)
+            .Include(f => f.Shorty)
+            .OrderByDescending(f => f.CreatedDate) 
+            .Skip((pageNumber - 1) * pageSize)
+            .Take(pageSize)
+            .Select(f => new FavoriteShortyResponse
+            {
+                Id = f.ShortyId,
+                Title = f.Shorty!.Title,
+                ShortUrl = f.Shorty.ShortUrl,
+                FullUrl = f.Shorty.FullUrl,
+                CreatedDate = f.CreatedDate 
+            })
+            .ToListAsync();
+    }
 }
