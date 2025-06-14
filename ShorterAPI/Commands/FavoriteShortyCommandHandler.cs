@@ -29,7 +29,7 @@ public class FavoriteShortyCommandHandler : IRequestHandler<FavoriteShortyComman
             return TypedResults.NotFound("The user does not exists");
         }
 
-        Shorty shorty = await _unitOfWork.ShortyRepository.ById(request.FavShorty.ShortyId);
+        Shorty shorty = await _unitOfWork.ShortyRepository.ById(request.FavShorty.Id);
 
         if (shorty is null || shorty?.CreatedUser != userExists.Id)
         {
@@ -39,14 +39,14 @@ public class FavoriteShortyCommandHandler : IRequestHandler<FavoriteShortyComman
         try
         {
             FavoriteShorty validateShorty = await _unitOfWork.FavoriteShortyRepository.ByIdByUser(
-                 userExists.Id, request.FavShorty.ShortyId);
+                 userExists.Id, request.FavShorty.Id);
 
             if (validateShorty is not null)
             {
                 return TypedResults.BadRequest("Favorite already saved");
             }
 
-            FavoriteShorty favShorty = new FavoriteShorty(request.FavShorty.ShortyId, userExists.Id);
+            FavoriteShorty favShorty = new FavoriteShorty(request.FavShorty.Id, userExists.Id);
 
             bool addedFav = await _unitOfWork.FavoriteShortyRepository.Create(favShorty);
             await _unitOfWork.Save();

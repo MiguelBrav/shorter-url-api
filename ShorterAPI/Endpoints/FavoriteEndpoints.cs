@@ -16,7 +16,7 @@ public static class FavoriteEndpoints
         return group;
     }
 
-    static async Task<IResult> Create(CreateFavoriteDTO favDTO, IMediator mediator, HttpContext httpContext)
+    static async Task<IResult> Create(ShortyIdDTO favDTO, IMediator mediator, HttpContext httpContext)
     {
 
         var userClaim = httpContext.User.Identity?.Name ?? string.Empty;

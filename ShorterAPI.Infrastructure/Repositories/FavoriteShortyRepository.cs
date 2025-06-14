@@ -45,4 +45,15 @@ public class FavoriteShortyRepository : IFavoriteShortyRepository
             })
             .ToListAsync();
     }
+
+    public async Task<bool> DeleteByIdByUser(string userId, int id)
+    {
+        FavoriteShorty shorty = await _context.FavoriteShorty.FirstOrDefaultAsync(s => s.ShortyId == id && s.UserId == userId);
+
+        if (shorty == null)
+            return false;
+
+        _context.FavoriteShorty.Remove(shorty);
+        return true;
+    }
 }
