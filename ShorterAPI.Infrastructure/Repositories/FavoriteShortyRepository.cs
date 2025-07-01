@@ -56,4 +56,19 @@ public class FavoriteShortyRepository : IFavoriteShortyRepository
         _context.FavoriteShorty.Remove(shorty);
         return true;
     }
+
+    public async Task<bool> DeleteByIdsByUser(string userId, List<int> ids)
+    {
+        List<FavoriteShorty> favorites = await _context.FavoriteShorty
+            .Where(f => f.UserId == userId && ids.Contains(f.ShortyId))
+            .ToListAsync();
+
+        if (!favorites.Any())
+            return false;
+
+        _context.FavoriteShorty.RemoveRange(favorites);
+        await _context.SaveChangesAsync();
+        return true;
+    }
+
 }

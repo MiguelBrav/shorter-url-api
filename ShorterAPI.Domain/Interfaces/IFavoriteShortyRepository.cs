@@ -9,4 +9,5 @@ public interface IFavoriteShortyRepository
     Task<FavoriteShorty> ByIdByUser(string userId, int id);
     Task<IEnumerable<FavoriteShortyResponse>> ByUser(string userId, int pageNumber, int pageSize);
     Task<bool> DeleteByIdByUser(string userId, int id);
+    Task<bool> DeleteByIdsByUser(string userId, List<int> ids);
 }

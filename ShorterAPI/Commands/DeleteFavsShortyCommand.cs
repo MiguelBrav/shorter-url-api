@@ -1,0 +1,11 @@
+﻿using MediatR;
+using ShorterAPI.DTO.DTOs;
+
+namespace ShorterAPI.Commands;
+
+public class DeleteFavsShortyCommand : IRequest<IResult>
+{
+    public string UserName { get; set; } = string.Empty;
+    public List<int> ShortyIds { get; set; } = new List<int>();
+}
+

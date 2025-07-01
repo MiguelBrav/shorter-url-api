@@ -9,40 +9,41 @@ using ShorterAPI.DTO.Responses;
 
 namespace ShorterAPI.Commands;
 
-public class DeleteFavShortyCommandHandler : IRequestHandler<DeleteFavShortyCommand, IResult>
+public class DeleteFavsShortyCommandHandler : IRequestHandler<DeleteFavsShortyCommand, IResult>
 {
     private readonly UserManager<IdentityUser> _userManager;
 
     private readonly IUnitOfWork _unitOfWork;
 
-    public DeleteFavShortyCommandHandler(UserManager<IdentityUser> userManager, IUnitOfWork unitOfWork)
+    public DeleteFavsShortyCommandHandler(UserManager<IdentityUser> userManager, IUnitOfWork unitOfWork)
     {
         _userManager = userManager;
         _unitOfWork = unitOfWork;
 
     }
-    public async Task<IResult> Handle(DeleteFavShortyCommand request, CancellationToken cancellationToken)
+    public async Task<IResult> Handle(DeleteFavsShortyCommand request, CancellationToken cancellationToken)
     {
         IdentityUser userExists = await _userManager.FindByNameAsync(request.UserName);
 
         if (userExists == null)
         {
             return TypedResults.NotFound("The user does not exists");
-        }             
+        }
 
         try
         {
-            bool isDeleted = await _unitOfWork.FavoriteShortyRepository.DeleteByIdByUser(userExists.Id, request.FavShorty.Id);
+            bool isDeleted = await _unitOfWork.FavoriteShortyRepository.DeleteByIdsByUser(userExists.Id, request.ShortyIds);
+
             if (!isDeleted)
-                return TypedResults.NotFound($"Favorite Shorty {request.FavShorty.Id} not found for the user.");
+                return TypedResults.NotFound("No matching favorite shortys found for the user.");
 
             await _unitOfWork.Save();
 
-            return TypedResults.Ok($"Favorite Shorty {request.FavShorty.Id} deleted");
+            return TypedResults.Ok("Selected favorite shortys deleted successfully.");
         }
         catch (Exception)
         {
-            return TypedResults.BadRequest("Favorite Shorty not deleted");
+            return TypedResults.BadRequest("Favorite shorties could not be deleted.");
         }
     }
 }
