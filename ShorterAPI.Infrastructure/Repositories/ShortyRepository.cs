@@ -33,6 +33,11 @@ public class ShortyRepository : IShortyRepository
     {
         return await _context.Shorty.AsNoTracking().FirstOrDefaultAsync(s => s.Id == Id && s.CreatedUser == userId && !s.IsDeleted);
     }
+    public async Task<List<Shorty>> ByIdsByUser(string userId, List<int> ids)
+    {
+        return await _context.Shorty.Where(s => ids.Contains(s.Id) && s.CreatedUser == userId && !s.IsDeleted).ToListAsync();
+    }
+
 
     public async Task<Shorty> isExistsShorty(string shortyUri)
     {

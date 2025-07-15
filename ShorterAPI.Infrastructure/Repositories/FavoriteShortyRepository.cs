@@ -21,9 +21,20 @@ public class FavoriteShortyRepository : IFavoriteShortyRepository
         return true;
     }
 
+    public async Task<bool> CreateList(List<FavoriteShorty> favoriteShortys)
+    {
+        await _context.FavoriteShorty.AddRangeAsync(favoriteShortys);
+
+        return true;
+    }
+
     public async Task<FavoriteShorty> ByIdByUser(string userId, int Id)
     {
         return await _context.FavoriteShorty.AsNoTracking().FirstOrDefaultAsync(s => s.ShortyId == Id && s.UserId == userId);
+    }
+    public async Task<List<FavoriteShorty>> ByUser(string userId)
+    {
+        return await _context.FavoriteShorty.Where(s => s.UserId == userId).ToListAsync();
     }
 
     public async Task<IEnumerable<FavoriteShortyResponse>> ByUser(string userId, int pageNumber, int pageSize)
@@ -71,4 +82,17 @@ public class FavoriteShortyRepository : IFavoriteShortyRepository
         return true;
     }
 
+    public async Task<bool> DeleteAllByUser(string userId)
+    {
+        var favorites = await _context.FavoriteShorty
+            .Where(f => f.UserId == userId)
+            .ToListAsync();
+
+        if (!favorites.Any())
+            return false;
+
+        _context.FavoriteShorty.RemoveRange(favorites);
+        await _context.SaveChangesAsync();
+        return true;
+    }
 }

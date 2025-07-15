@@ -12,9 +12,13 @@ public static class FavoriteEndpoints
     {
         group.MapPost("/", Create).RequireAuthorization();
 
+        group.MapPost("/byIds", CreateByIds).RequireAuthorization();
+
         group.MapDelete("/{id}", Delete).RequireAuthorization();
 
         group.MapDelete("/", DeleteByIds).RequireAuthorization();
+
+        group.MapDelete("/all", DeleteAll).RequireAuthorization();
 
         group.MapGet("/page/{pageId}/size/{pageSize}", AllFavorites).RequireAuthorization();
 
@@ -37,6 +41,29 @@ public static class FavoriteEndpoints
             };
 
             return await mediator.Send(favoriteShortyCommand);
+        }
+        else
+        {
+            return TypedResults.Unauthorized();
+        }
+    }
+
+    static async Task<IResult> CreateByIds(List<int> shortys, IMediator mediator, HttpContext httpContext)
+    {
+
+        var userClaim = httpContext.User.Identity?.Name ?? string.Empty;
+
+        if (!string.IsNullOrEmpty(userClaim))
+        {
+            string _User = userClaim;
+
+            FavoritesShortyCommand favoritesShortyCommand = new FavoritesShortyCommand
+            {
+                UserName = _User,
+                ShortyIds = shortys
+            };
+
+            return await mediator.Send(favoritesShortyCommand);
         }
         else
         {
@@ -83,6 +110,28 @@ public static class FavoriteEndpoints
             };
 
             return await mediator.Send(favoriteShortyCommand);
+        }
+        else
+        {
+            return TypedResults.Unauthorized();
+        }
+    }
+
+    static async Task<IResult> DeleteAll(IMediator mediator, HttpContext httpContext)
+    {
+
+        var userClaim = httpContext.User.Identity?.Name ?? string.Empty;
+
+        if (!string.IsNullOrEmpty(userClaim))
+        {
+            string _User = userClaim;
+
+            DeleteAllFavsShortyCommand delleteAllFavsCommand = new DeleteAllFavsShortyCommand
+            {
+                UserName = _User
+            };
+
+            return await mediator.Send(delleteAllFavsCommand);
         }
         else
         {
