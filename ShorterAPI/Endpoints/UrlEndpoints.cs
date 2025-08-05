@@ -18,6 +18,8 @@ public static class UrlEndpoints
 
         group.MapGet("/id/{id}", ById).RequireAuthorization();
 
+        group.MapGet("/id/{id}/qr", QrById).RequireAuthorization();
+
         group.MapGet("/id/{id}/stats", StatsById).RequireAuthorization();
 
         group.MapGet("/check/{shorturl}", CheckName);
@@ -235,6 +237,29 @@ public static class UrlEndpoints
             };
 
             return await mediator.Send(shortyBulkCommand);
+        }
+        else
+        {
+            return TypedResults.Unauthorized();
+        }
+    }
+
+    static async Task<IResult> QrById(int id, IMediator mediator, HttpContext httpContext)
+    {
+
+        var userClaim = httpContext.User.Identity?.Name ?? string.Empty;
+
+        if (!string.IsNullOrEmpty(userClaim))
+        {
+            string _User = userClaim;
+
+            QRShortyQuery shortyQuery = new QRShortyQuery
+            {
+                UserName = _User,
+                ShortyId = id
+            };
+
+            return await mediator.Send(shortyQuery);
         }
         else
         {
