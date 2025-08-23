@@ -6,19 +6,19 @@ using ShorterAPI.Helpers;
 
 namespace ShorterAPI.Queries;
 
-public class QRShortyQueryHandler : IRequestHandler<QRShortyQuery, IResult>
+public class FreeQrShortyByUrlQueryHandler : IRequestHandler<FreeQrShortyByUrlQuery, IResult>
 {
     private readonly UserManager<IdentityUser> _userManager;
 
     private readonly IUnitOfWork _unitOfWork;
 
-    public QRShortyQueryHandler(UserManager<IdentityUser> userManager, IUnitOfWork unitOfWork)
+    public FreeQrShortyByUrlQueryHandler(UserManager<IdentityUser> userManager, IUnitOfWork unitOfWork)
     {
         _userManager = userManager;
         _unitOfWork = unitOfWork;
 
     }
-    public async Task<IResult> Handle(QRShortyQuery request, CancellationToken cancellationToken)
+    public async Task<IResult> Handle(FreeQrShortyByUrlQuery request, CancellationToken cancellationToken)
     {
         IdentityUser userExists = await _userManager.FindByNameAsync(request.UserName);
 
@@ -27,18 +27,11 @@ public class QRShortyQueryHandler : IRequestHandler<QRShortyQuery, IResult>
             return TypedResults.NotFound("The user does not exists");
         }
 
-        Shorty shorty = await _unitOfWork.ShortyRepository.ByIdByUser(userExists.Id, request.ShortyId);
-
-        if (shorty is null)
-        {
-            return TypedResults.NoContent();
-        }
-
-        string base64 = QrHelper.GenerateQrBase64(shorty.FullUrl);
+        string base64 = QrHelper.GenerateQrBase64(request.FullUrl);
 
         return TypedResults.Ok(new
         {
-            url = shorty.FullUrl,
+            url = request.FullUrl,
             qrCodeBase64 = $"data:image/png;base64,{base64}"
         });
     }

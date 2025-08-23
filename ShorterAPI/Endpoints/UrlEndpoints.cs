@@ -24,6 +24,8 @@ public static class UrlEndpoints
 
         group.MapGet("/check/{shorturl}", CheckName);
 
+        group.MapGet("/free/qr", FreeQrById).RequireAuthorization();
+
         group.MapPost("/", Create).RequireAuthorization();
 
         group.MapPut("/", Update).RequireAuthorization();
@@ -257,6 +259,29 @@ public static class UrlEndpoints
             {
                 UserName = _User,
                 ShortyId = id
+            };
+
+            return await mediator.Send(shortyQuery);
+        }
+        else
+        {
+            return TypedResults.Unauthorized();
+        }
+    }
+
+    static async Task<IResult> FreeQrById(string fullUrl, IMediator mediator, HttpContext httpContext)
+    {
+
+        var userClaim = httpContext.User.Identity?.Name ?? string.Empty;
+
+        if (!string.IsNullOrEmpty(userClaim))
+        {
+            string _User = userClaim;
+
+            FreeQrShortyByUrlQuery shortyQuery = new FreeQrShortyByUrlQuery
+            {
+                UserName = _User,
+                FullUrl = fullUrl
             };
 
             return await mediator.Send(shortyQuery);
