@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using ShorterAPI.Commands;
 using ShorterAPI.DTO.DTOs;
@@ -25,6 +26,8 @@ public static class UrlEndpoints
         group.MapGet("/check/{shorturl}", CheckName);
 
         group.MapGet("/free/qr", FreeQrById).RequireAuthorization();
+
+        group.MapGet("/free/qrs", FreeQrsByUser).RequireAuthorization();
 
         group.MapPost("/", Create).RequireAuthorization();
 
@@ -282,6 +285,29 @@ public static class UrlEndpoints
             {
                 UserName = _User,
                 FullUrl = fullUrl
+            };
+
+            return await mediator.Send(shortyQuery);
+        }
+        else
+        {
+            return TypedResults.Unauthorized();
+        }
+    }
+
+    static async Task<IResult> FreeQrsByUser([FromQuery] string[] urls, IMediator mediator, HttpContext httpContext)
+    {
+
+        var userClaim = httpContext.User.Identity?.Name ?? string.Empty;
+
+        if (!string.IsNullOrEmpty(userClaim))
+        {
+            string _User = userClaim;
+
+            FreeQrsShortysByUrlQuery shortyQuery = new FreeQrsShortysByUrlQuery
+            {
+                UserName = _User,
+                Urls = urls.ToList()
             };
 
             return await mediator.Send(shortyQuery);
