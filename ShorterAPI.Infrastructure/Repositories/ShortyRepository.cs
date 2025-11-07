@@ -73,6 +73,23 @@ public class ShortyRepository : IShortyRepository
             .ToListAsync();
     }
 
+    public async Task<IEnumerable<ShortyLeastUsedResponse>> GetLeastUsedShortys(int limit)
+    {
+        return await _context.Shorty
+            .AsNoTracking()
+            .Where(s => !s.IsDeleted)
+            .Select(s => new ShortyLeastUsedResponse
+            {
+                Id = s.Id,
+                ShortUrl = s.ShortUrl,
+                CreatedDate = s.CreatedDate,
+                AccessCount = _context.LogRedirect.Count(l => l.ShortyId == s.Id)
+            })
+            .OrderBy(s => s.AccessCount)
+            .Take(limit)
+            .ToListAsync();
+    }
+
     public async Task<IEnumerable<LastShortyResponse>> GetLastShortys(int limit)
     {
         return await _context.Shorty

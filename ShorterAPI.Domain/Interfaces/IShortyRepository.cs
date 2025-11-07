@@ -19,6 +19,7 @@ public interface IShortyRepository
 
     Task<IEnumerable<Shorty>> GetAllByUser(string userId, int pageNumber, int pageSize);
     Task<IEnumerable<ShortyTopResponse>> GetTopShortys(int limit);
+    Task<IEnumerable<ShortyLeastUsedResponse>> GetLeastUsedShortys(int limit);
     Task<IEnumerable<LastShortyResponse>> GetLastShortys(int limit);
     Task<IEnumerable<RandomShortyResponse>> GetRandomShortys(int limit);
 
