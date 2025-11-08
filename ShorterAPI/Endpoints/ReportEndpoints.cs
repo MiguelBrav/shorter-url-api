@@ -19,7 +19,9 @@ public static class ReportEndpoints
 
         group.MapGet("/random-urls/limit/{limit}/csv", RandomShortysCsv);
 
-        group.MapGet("/least-used/limit/{limit}", LeastUsedShortys);
+        group.MapGet("/least-used-urls/limit/{limit}", LeastUsedShortys);
+
+        group.MapGet("/least-used-urls/limit/{limit}/csv", LeastUsedShortysCsv);
 
         return group;
     }
@@ -149,6 +151,26 @@ public static class ReportEndpoints
         if (!string.IsNullOrEmpty(userClaim))
         {
             LastShortyReportCsvQuery shortyReport = new LastShortyReportCsvQuery
+            {
+                Limit   = limit,
+            };
+
+            return await mediator.Send(shortyReport);
+        }
+        else
+        {
+            return TypedResults.Unauthorized();
+        }
+    }
+
+    static async Task<IResult> LeastUsedShortysCsv(int limit, IMediator mediator, HttpContext httpContext)
+    {
+
+        var userClaim = httpContext.User.Identity?.Name ?? string.Empty;
+
+        if (!string.IsNullOrEmpty(userClaim))
+        {
+            LeastUsedShortysReportCsvQuery shortyReport = new LeastUsedShortysReportCsvQuery
             {
                 Limit   = limit,
             };
