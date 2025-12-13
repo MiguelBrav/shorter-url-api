@@ -22,6 +22,5 @@ public interface IShortyRepository
     Task<IEnumerable<ShortyLeastUsedResponse>> GetLeastUsedShortys(int limit);
     Task<IEnumerable<LastShortyResponse>> GetLastShortys(int limit);
     Task<IEnumerable<RandomShortyResponse>> GetRandomShortys(int limit);
-
-
+    Task<IEnumerable<ShortyNeverUsedResponse>> GetNeverUsedShortys(int limit);
 }

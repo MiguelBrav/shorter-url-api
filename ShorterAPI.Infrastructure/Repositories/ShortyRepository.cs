@@ -139,7 +139,20 @@ public class ShortyRepository : IShortyRepository
         return result;
     }
 
-
-
-
+    public async Task<IEnumerable<ShortyNeverUsedResponse>> GetNeverUsedShortys(int limit)
+    {
+        return await _context.Shorty
+            .AsNoTracking()
+            .Where(s => !s.IsDeleted)
+            .Where(s => !_context.LogRedirect.Any(l => l.ShortyId == s.Id))
+            .Select(s => new ShortyNeverUsedResponse
+            {
+                Id = s.Id,
+                ShortUrl = s.ShortUrl,
+                CreatedDate = s.CreatedDate
+            })
+            .OrderBy(s => s.CreatedDate)
+            .Take(limit)
+            .ToListAsync();
+    }
 }
