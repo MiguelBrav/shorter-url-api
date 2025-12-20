@@ -25,6 +25,8 @@ public static class ReportEndpoints
 
         group.MapGet("/never-used-urls/limit/{limit}", NeverUsedShortys);
 
+        group.MapGet("/never-used-urls/limit/{limit}/csv", NeverUsedShortysCsv);
+
         return group;
     }
 
@@ -192,6 +194,26 @@ public static class ReportEndpoints
         if (!string.IsNullOrEmpty(userClaim))
         {
             LeastUsedShortysReportCsvQuery shortyReport = new LeastUsedShortysReportCsvQuery
+            {
+                Limit   = limit,
+            };
+
+            return await mediator.Send(shortyReport);
+        }
+        else
+        {
+            return TypedResults.Unauthorized();
+        }
+    }
+
+    static async Task<IResult> NeverUsedShortysCsv(int limit, IMediator mediator, HttpContext httpContext)
+    {
+
+        var userClaim = httpContext.User.Identity?.Name ?? string.Empty;
+
+        if (!string.IsNullOrEmpty(userClaim))
+        {
+            NeverUsedShortysReportCsvQuery shortyReport = new NeverUsedShortysReportCsvQuery
             {
                 Limit   = limit,
             };
