@@ -10,7 +10,7 @@ It supports authentication, usage tracking, favorites, reports, and tagging (com
 ---
 
 ##  Base URL  
-[https://shortys.application-service.work/](https://shortys.application-service.work/swagger/index.html)
+[https://shortys.segurab.com/swagger/index.html](https://shortys.segurab.com/swagger/index.html   )
 
 ## API Sections
 
