@@ -35,6 +35,8 @@ public static class UrlEndpoints
 
         group.MapDelete("/{id}", Delete).RequireAuthorization();
 
+        group.MapPost("clone", Clone).RequireAuthorization();
+
         group.MapPost("/generate", Generate).RequireAuthorization();
 
         group.MapPost("/generate/bulk", GenerateBulk).RequireAuthorization();
@@ -101,6 +103,29 @@ public static class UrlEndpoints
             {
                 UserName = _User,
                 Shorty = new ShortyIdDTO { Id = id }
+            };
+
+            return await mediator.Send(shortyCommand);
+        }
+        else
+        {
+            return TypedResults.Unauthorized();
+        }
+    }
+
+    static async Task<IResult> Clone(CloneShortyDTO shortyDTO, IMediator mediator, HttpContext httpContext)
+    {
+
+        var userClaim = httpContext.User.Identity?.Name ?? string.Empty;
+
+        if (!string.IsNullOrEmpty(userClaim))
+        {
+            string _User = userClaim;
+
+            CloneShortyCommand shortyCommand = new CloneShortyCommand
+            {
+                UserName = _User,
+                Shorty = shortyDTO 
             };
 
             return await mediator.Send(shortyCommand);
