@@ -10,7 +10,7 @@ public class FavoriteShorty
 
     [Required]
     public string UserId { get; set; } = string.Empty;
-    public DateTime CreatedDate { get; set; } = DateTime.Now;
+    public DateTime CreatedDate { get; set; } = DateTime.UtcNow;
     public Shorty? Shorty { get; set; }
 
     public FavoriteShorty() { }
@@ -18,7 +18,7 @@ public class FavoriteShorty
     {
         ShortyId = shortyId;
         UserId = userId;
-        CreatedDate = DateTime.Now;
+        CreatedDate = DateTime.UtcNow;
     }
 }
 

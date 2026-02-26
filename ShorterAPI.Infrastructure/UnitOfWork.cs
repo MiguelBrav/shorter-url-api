@@ -9,14 +9,17 @@ namespace ShorterAPI.Infrastructure
         public ILogRedirectRepository LogRepository { get; }
         public IFavoriteShortyRepository FavoriteShortyRepository { get; }
 
+        public ITagRepository TagShortyRepository { get; }
+
         private readonly ApplicationDbContext _context;
 
-        public UnitOfWork(ApplicationDbContext context, IShortyRepository shortyRepository, ILogRedirectRepository logRepository, IFavoriteShortyRepository favoriteShortyRepository)
+        public UnitOfWork(ApplicationDbContext context, IShortyRepository shortyRepository, ILogRedirectRepository logRepository, IFavoriteShortyRepository favoriteShortyRepository, ITagRepository tagShortyRepository)
         {
             _context = context;
             ShortyRepository = shortyRepository;
             LogRepository = logRepository;
             FavoriteShortyRepository = favoriteShortyRepository;
+            TagShortyRepository = tagShortyRepository;
         }
 
         public async Task<int> Save()

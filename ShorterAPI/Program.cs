@@ -69,6 +69,7 @@ builder.Services.AddScoped<IShortyRepository,ShortyRepository>();
 builder.Services.AddScoped<ILogRedirectRepository, LogRedirectRepository>();
 builder.Services.AddScoped<IShortyService, ShortyService>();
 builder.Services.AddScoped<IFavoriteShortyRepository, FavoriteShortyRepository>();
+builder.Services.AddScoped<ITagRepository, TagRepository>();
 
 builder.Services.AddAuthorization(options =>
 {
@@ -121,6 +122,8 @@ app.UseHttpsRedirection();
 app.MapGroup("/identity").WithTags("Identity").MapIdentityApi<IdentityUser>();
 
 app.MapGroup("/url").WithTags("Url").MapUrl();
+
+app.MapGroup("/tags").WithTags("Tags").MapTags();
 
 app.MapGroup("/logredirect").WithTags("LogRedirect").MapReport();
 

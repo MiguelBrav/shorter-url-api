@@ -23,11 +23,27 @@ namespace ShorterAPI.Infrastructure
                 .HasOne(f => f.Shorty)
                 .WithMany()
                 .HasForeignKey(f => f.ShortyId);
+
+            builder.Entity<ShortyTag>()
+           .HasIndex(st => new { st.ShortyId, st.TagId })
+           .IsUnique();
+
+            builder.Entity<ShortyTag>()
+                .HasOne<Shorty>()
+                .WithMany()
+                .HasForeignKey(st => st.ShortyId);
+
+            builder.Entity<ShortyTag>()
+                .HasOne(st => st.Tag)
+                .WithMany()
+                .HasForeignKey(st => st.TagId);
         }
 
         public DbSet<Shorty> Shorty { get; set; }
         public DbSet<LogRedirect> LogRedirect { get; set; }
         public DbSet<FavoriteShorty> FavoriteShorty { get; set; }
+        public DbSet<Tag> Tags { get; set; }
+        public DbSet<ShortyTag> ShortyTags { get; set; }
 
     }
 }
