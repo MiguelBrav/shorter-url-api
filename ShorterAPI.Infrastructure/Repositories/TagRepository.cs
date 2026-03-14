@@ -107,4 +107,15 @@ public class TagRepository : ITagRepository
             _context.ShortyTags.AddRange(relationsToAdd);
         }
     }
+
+    public async Task<IEnumerable<Tag>> GetByShorty(int shortyId)
+    {
+        var tags = await _context.ShortyTags
+            .Where(st => st.ShortyId == shortyId)
+            .Include(st => st.Tag)
+            .Select(st => st.Tag)
+            .ToListAsync();
+
+        return tags;
+    }
 }
