@@ -9,4 +9,5 @@ public interface ITagRepository
     Task<IEnumerable<Tag>> GetOrCreateMany(IEnumerable<string> tags);
     Task AssignManyToShorty(int shortyId, IEnumerable<Tag> tags);
     Task<IEnumerable<Tag>> GetByShorty(int shortyId);
+    Task RemoveTagsFromShorty(int shortyId, IEnumerable<string> tagNames);
 }

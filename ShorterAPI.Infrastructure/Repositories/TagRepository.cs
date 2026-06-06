@@ -118,4 +118,17 @@ public class TagRepository : ITagRepository
 
         return tags;
     }
+
+    public async Task RemoveTagsFromShorty(int shortyId, IEnumerable<string> tagNames)
+    {
+        var normalized = tagNames.Select(t => t.ToLower().Trim()).ToList();
+
+        var relations = await _context.ShortyTags
+            .Where(st => st.ShortyId == shortyId && normalized.Contains(st.Tag.Name))
+            .ToListAsync();
+
+        if (!relations.Any()) return;
+
+        _context.ShortyTags.RemoveRange(relations);
+    }
 }
