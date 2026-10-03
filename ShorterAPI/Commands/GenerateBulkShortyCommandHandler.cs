@@ -1,4 +1,4 @@
-﻿using MediatR;
+using Mediator;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using ShorterAPI.Domain.Interfaces;
@@ -31,7 +31,7 @@ public class GenerateBulkShortyCommandHandler : IRequestHandler<GenerateBulkShor
         _charsShorty = _configuration.GetValue<string>("CharsShorty") ?? string.Empty;
         _shortyLenght = _configuration.GetValue<int>("ShortyNameLenght");
     }
-    public async Task<IResult> Handle(GenerateBulkShortyCommand request, CancellationToken cancellationToken)
+    public async ValueTask<IResult> Handle(GenerateBulkShortyCommand request, CancellationToken cancellationToken)
     {
         IdentityUser userExists = await _userManager.FindByNameAsync(request.UserName);
 

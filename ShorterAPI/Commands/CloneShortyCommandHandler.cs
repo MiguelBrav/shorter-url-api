@@ -1,4 +1,4 @@
-﻿using MediatR;
+using Mediator;
 using Microsoft.AspNetCore.Identity;
 using ShorterAPI.Domain.Interfaces;
 using ShorterAPI.Domain.UOW;
@@ -30,7 +30,7 @@ public class CloneShortyCommandHandler : IRequestHandler<CloneShortyCommand, IRe
         _charsShorty = _configuration.GetValue<string>("CharsShorty") ?? string.Empty;
         _shortyLenght = _configuration.GetValue<int>("ShortyNameLenght");
     }
-    public async Task<IResult> Handle(CloneShortyCommand request, CancellationToken cancellationToken)
+    public async ValueTask<IResult> Handle(CloneShortyCommand request, CancellationToken cancellationToken)
     {
         IdentityUser userExists = await _userManager.FindByNameAsync(request.UserName);
 

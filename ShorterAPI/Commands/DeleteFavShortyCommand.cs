@@ -1,4 +1,4 @@
-﻿using MediatR;
+using Mediator;
 using ShorterAPI.DTO.DTOs;
 
 namespace ShorterAPI.Commands;

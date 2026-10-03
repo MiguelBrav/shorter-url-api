@@ -1,4 +1,4 @@
-﻿using MediatR;
+using Mediator;
 using Microsoft.AspNetCore.Identity;
 using ShorterAPI.Domain.UOW;
 using ShorterAPI.DTO.Entities;
@@ -15,7 +15,7 @@ public class CheckShortyNameQueryHandler : IRequestHandler<CheckShortyNameQuery,
         _unitOfWork = unitOfWork;
 
     }
-    public async Task<IResult> Handle(CheckShortyNameQuery request, CancellationToken cancellationToken)
+    public async ValueTask<IResult> Handle(CheckShortyNameQuery request, CancellationToken cancellationToken)
     {
         Shorty shorty = await _unitOfWork.ShortyRepository.isExistsShorty(request.ShortyUrl.ShortyName);
 

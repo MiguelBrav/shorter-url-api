@@ -1,6 +1,6 @@
-﻿
 
-using MediatR;
+
+using Mediator;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using Newtonsoft.Json;
@@ -23,7 +23,7 @@ public class DeleteAllFavsShortyCommandHandler : IRequestHandler<DeleteAllFavsSh
         _unitOfWork = unitOfWork;
 
     }
-    public async Task<IResult> Handle(DeleteAllFavsShortyCommand request, CancellationToken cancellationToken)
+    public async ValueTask<IResult> Handle(DeleteAllFavsShortyCommand request, CancellationToken cancellationToken)
     {
         IdentityUser userExists = await _userManager.FindByNameAsync(request.UserName);
 

@@ -1,4 +1,4 @@
-﻿using MediatR;
+using Mediator;
 using ShorterAPI.Domain.UOW;
 using ShorterAPI.DTO.Responses;
 using ShorterAPI.Helpers;
@@ -14,7 +14,7 @@ public class NeverUsedShortysReportCsvQueryHandler : IRequestHandler<NeverUsedSh
         _unitOfWork = unitOfWork;
 
     }
-    public async Task<IResult> Handle(NeverUsedShortysReportCsvQuery request, CancellationToken cancellationToken)
+    public async ValueTask<IResult> Handle(NeverUsedShortysReportCsvQuery request, CancellationToken cancellationToken)
     {
         if (request.Limit == 0)
         {

@@ -1,4 +1,4 @@
-﻿using MediatR;
+using Mediator;
 using ShorterAPI.Domain.UOW;
 using ShorterAPI.DTO.Entities;
 using ShorterAPI.Events;
@@ -16,7 +16,7 @@ public class RedirectQueryHandler : IRequestHandler<RedirectQuery, IResult>
         _unitOfWork = unitOfWork;
         _mediator = mediator;
     }
-    public async Task<IResult> Handle(RedirectQuery request, CancellationToken cancellationToken)
+    public async ValueTask<IResult> Handle(RedirectQuery request, CancellationToken cancellationToken)
     {
         Shorty shorty = await _unitOfWork.ShortyRepository.isExistsShorty(request.ShortyUrl);
 
