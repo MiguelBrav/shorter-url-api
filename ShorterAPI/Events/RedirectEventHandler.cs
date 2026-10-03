@@ -1,4 +1,4 @@
-﻿using MediatR;
+using Mediator;
 using ShorterAPI.Domain.UOW;
 using ShorterAPI.DTO.Entities;
 
@@ -14,7 +14,7 @@ public class RedirectEventHandler : INotificationHandler<RedirectEvent>
         _unitOfWork = unitOfWork;
     }
 
-    public async Task Handle(RedirectEvent logRedirect, CancellationToken cancellationToken)
+    public async ValueTask Handle(RedirectEvent logRedirect, CancellationToken cancellationToken)
     {
         LogRedirect logRedirectShorty = new LogRedirect(logRedirect.logShorty.Id);
 

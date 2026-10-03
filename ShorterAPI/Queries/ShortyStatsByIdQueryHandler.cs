@@ -1,4 +1,4 @@
-﻿using MediatR;
+using Mediator;
 using Microsoft.AspNetCore.Identity;
 using ShorterAPI.Domain.UOW;
 using ShorterAPI.DTO.Entities;
@@ -18,7 +18,7 @@ public class ShortyStatsByIdQueryHandler : IRequestHandler<ShortyStatsByIdQuery,
         _unitOfWork = unitOfWork;
 
     }
-    public async Task<IResult> Handle(ShortyStatsByIdQuery request, CancellationToken cancellationToken)
+    public async ValueTask<IResult> Handle(ShortyStatsByIdQuery request, CancellationToken cancellationToken)
     {
         IdentityUser userExists = await _userManager.FindByNameAsync(request.UserName);
 

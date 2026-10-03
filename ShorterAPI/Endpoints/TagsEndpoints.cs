@@ -1,4 +1,4 @@
-using MediatR;
+using Mediator;
 using Microsoft.AspNetCore.Mvc;
 using ShorterAPI.Commands;
 using ShorterAPI.Queries;

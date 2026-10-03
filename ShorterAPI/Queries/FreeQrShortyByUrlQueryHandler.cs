@@ -1,4 +1,4 @@
-﻿using MediatR;
+using Mediator;
 using Microsoft.AspNetCore.Identity;
 using ShorterAPI.Domain.UOW;
 using ShorterAPI.DTO.Entities;
@@ -18,7 +18,7 @@ public class FreeQrShortyByUrlQueryHandler : IRequestHandler<FreeQrShortyByUrlQu
         _unitOfWork = unitOfWork;
 
     }
-    public async Task<IResult> Handle(FreeQrShortyByUrlQuery request, CancellationToken cancellationToken)
+    public async ValueTask<IResult> Handle(FreeQrShortyByUrlQuery request, CancellationToken cancellationToken)
     {
         IdentityUser userExists = await _userManager.FindByNameAsync(request.UserName);
 

@@ -1,4 +1,4 @@
-﻿using MediatR;
+using Mediator;
 using ShorterAPI.Domain.UOW;
 using ShorterAPI.DTO.Responses;
 using ShorterAPI.Helpers;
@@ -14,7 +14,7 @@ public class LastShortyReportCsvQueryHandler : IRequestHandler<LastShortyReportC
         _unitOfWork = unitOfWork;
 
     }
-    public async Task<IResult> Handle(LastShortyReportCsvQuery request, CancellationToken cancellationToken)
+    public async ValueTask<IResult> Handle(LastShortyReportCsvQuery request, CancellationToken cancellationToken)
     {
         if (request.Limit == 0)
         {

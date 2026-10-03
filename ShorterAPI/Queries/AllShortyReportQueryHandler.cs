@@ -1,4 +1,4 @@
-﻿using MediatR;
+using Mediator;
 using Microsoft.AspNetCore.Identity;
 using ShorterAPI.Domain.UOW;
 using ShorterAPI.DTO.Entities;
@@ -22,7 +22,7 @@ public class AllShortyReportQueryHandler : IRequestHandler<AllShortyReportQuery,
         _mediator = mediator;
         _userManager = userManager;
     }
-    public async Task<IResult> Handle(AllShortyReportQuery request, CancellationToken cancellationToken)
+    public async ValueTask<IResult> Handle(AllShortyReportQuery request, CancellationToken cancellationToken)
     {
         List<RedirectReportResponse> response = new List<RedirectReportResponse>();
 

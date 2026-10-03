@@ -1,4 +1,4 @@
-﻿using MediatR;
+using Mediator;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using Newtonsoft.Json;
@@ -21,7 +21,7 @@ public class UpdateShortyCommandHandler : IRequestHandler<UpdateShortyCommand, I
         _unitOfWork = unitOfWork;
 
     }
-    public async Task<IResult> Handle(UpdateShortyCommand request, CancellationToken cancellationToken)
+    public async ValueTask<IResult> Handle(UpdateShortyCommand request, CancellationToken cancellationToken)
     {
         IdentityUser userExists = await _userManager.FindByNameAsync(request.UserName);
 

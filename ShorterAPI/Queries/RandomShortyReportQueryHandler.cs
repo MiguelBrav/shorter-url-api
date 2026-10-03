@@ -1,4 +1,4 @@
-﻿using MediatR;
+using Mediator;
 using ShorterAPI.Domain.UOW;
 using ShorterAPI.DTO.Responses;
 
@@ -13,7 +13,7 @@ public class RandomShortyReportQueryHandler : IRequestHandler<RandomShortyReport
         _unitOfWork = unitOfWork;
 
     }
-    public async Task<IResult> Handle(RandomShortyReportQuery request, CancellationToken cancellationToken)
+    public async ValueTask<IResult> Handle(RandomShortyReportQuery request, CancellationToken cancellationToken)
     {
         if (request.Limit == 0)
         {

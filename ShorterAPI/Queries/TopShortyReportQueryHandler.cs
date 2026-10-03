@@ -1,4 +1,4 @@
-﻿using MediatR;
+using Mediator;
 using Microsoft.AspNetCore.Identity;
 using ShorterAPI.Domain.UOW;
 using ShorterAPI.DTO.Entities;
@@ -15,7 +15,7 @@ public class TopShortyReportQueryHandler : IRequestHandler<TopShortyReportQuery,
         _unitOfWork = unitOfWork;
 
     }
-    public async Task<IResult> Handle(TopShortyReportQuery request, CancellationToken cancellationToken)
+    public async ValueTask<IResult> Handle(TopShortyReportQuery request, CancellationToken cancellationToken)
     {
         if (request.Limit == 0)
         {

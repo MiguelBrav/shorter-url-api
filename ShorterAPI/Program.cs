@@ -1,3 +1,4 @@
+using Mediator;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -62,7 +63,11 @@ builder.Services.AddSwaggerGen(c =>
                     });
 
 });
-builder.Services.AddMediatR(a => a.RegisterServicesFromAssembly(typeof(Program).Assembly));
+builder.Services.AddMediator(options =>
+{
+    options.ServiceLifetime = ServiceLifetime.Scoped;
+    options.Assemblies = [typeof(Program)];
+});
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IShortyRepository,ShortyRepository>();
