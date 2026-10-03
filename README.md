@@ -73,11 +73,17 @@ Track every redirect and URL visit.
 ---
 
 ## Tech Stack
-- **.NET 8 Minimal API**  
+- **.NET 10 Minimal API**  
 - **Entity Framework Core**  
 - **MySql**  
 - **Swagger / OpenAPI**  
 - **JWT Authentication**
+
+---
+
+## Versioning
+
+Updated from .NET 8 to .NET 10 (03/10/2026)
 
 ---
 
